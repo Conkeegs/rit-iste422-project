@@ -12,7 +12,7 @@ public class CreateDDLMySQLTest {
   }
     
   @Test
-  public void createNullEDDLTest(){
+  public void createNullDDLTest(){
 		CreateDDLMySQL testObj = new CreateDDLMySQL();
     testObj.createDDL();
     assertEquals("Should be same as Null StringBuffer", testObj.sb.toString(), nullSB.toString());
