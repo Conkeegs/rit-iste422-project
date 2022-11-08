@@ -14,11 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class EdgeConvertFileParserTest {
-    @Before
-	public void setUp() throws Exception {
-		// testObj = new EdgeConnector("1|2|3|testStyle1|testStyle2");
-	}
-
 	@Test
 	public void testConstructorFileAndParseFilePropertiesAreEqual() {
         // valid edge file
