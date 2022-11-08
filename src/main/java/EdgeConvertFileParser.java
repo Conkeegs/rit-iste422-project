@@ -719,18 +719,15 @@ public class EdgeConvertFileParser {
          logger.error(String.format("Cannot find: \"%s\".", inputFile.getAbsolutePath()));
          logger.trace(String.format("Cannot find: \"%s\".", inputFile.getAbsolutePath()));
 
-         logger.info("Exiting program.");
-         System.exit(0);
+         timeLogger.info("EdgeConvertFileParser.openFile() ended.");
+         return false;
       } // catch FileNotFoundException
       catch (IOException ioe) {
          logger.error(String.format("Error reading file: \"%s\".", inputFile.getAbsolutePath()));
          logger.trace(String.format("Cannot reading file: \"%s\".", inputFile.getAbsolutePath()));
 
-         logger.info("Exiting program.");
-         System.exit(0);
+         timeLogger.info("EdgeConvertFileParser.openFile() ended.");
+         return false;
       } // catch IOException
-
-      timeLogger.info("EdgeConvertFileParser.openFile() ended.");
-      return false;
    } // openFile()
 } // EdgeConvertFileHandler

@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -13,9 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class EdgeConvertFileParserTest {
-    // @Rule
-    // public ExpectedException exceptionRule = ExpectedException.none();
-
     @Before
 	public void setUp() throws Exception {
 		// testObj = new EdgeConnector("1|2|3|testStyle1|testStyle2");
@@ -87,7 +85,7 @@ public class EdgeConvertFileParserTest {
             Field alFieldsField = EdgeConvertFileParser.class.getDeclaredField("alFields");
             Field alConnectorsField = EdgeConvertFileParser.class.getDeclaredField("alConnectors");
 
-            // make 'alTablesField' and 'alConnectorsField' fields accessible
+            // make 'alTablesField', 'alFieldsField', and 'alConnectorsField' fields accessible
             alTablesField.setAccessible(true);
             alFieldsField.setAccessible(true);
             alConnectorsField.setAccessible(true);
@@ -112,5 +110,133 @@ public class EdgeConvertFileParserTest {
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
         }
+    }
+
+    @Test
+    public void testEdgeFileWithCompositeAttributesInConnectorReturnsFalse() {
+        File constructorFile = new File("edge_files/CompositeAttributes.edg");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return false since 'CompositeAttributes.edg' contains a 'Connector' whose endpoints lead to the same 'Figure'
+        assertFalse(edgFileParser.openFile(constructorFile));
+    }
+
+    @Test
+    public void testEdgeFileWithManyToManyInConnectorReturnsFalse() {
+        File constructorFile = new File("edge_files/ManyToMany.edg");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return false since 'ManyToMany.edg' contains a 'Connector' with a many-to-many relationship between its endpoints
+        assertFalse(edgFileParser.openFile(constructorFile));
+    }
+
+    @Test
+    public void testArrayListContainsSameNumberOfFieldsAsSaveFile() {
+         File constructorFile = new File("save_files/Courses.edg.sav");
+         int numFieldsInEdgeFile = 7;
+ 
+         try {
+             EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+             Field alFieldsField = EdgeConvertFileParser.class.getDeclaredField("alFields");
+ 
+             // make 'allFieldsField' accessible
+             alFieldsField.setAccessible(true);
+ 
+             ArrayList alFields = (ArrayList)alFieldsField.get(edgFileParser);
+ 
+             // openFile() should return true since 'Courses.edg.sav' is a valid sav file
+             assertTrue(edgFileParser.openFile(constructorFile));
+ 
+             // alFields size() should be same amount of fields in sav file
+             assertSame(numFieldsInEdgeFile, alFields.size());
+         } catch (NoSuchFieldException nsfe) {
+             nsfe.printStackTrace();
+         } catch (IllegalAccessException iae) {
+             iae.printStackTrace();
+         }
+    }
+
+    @Test
+    public void testArraysNotNullAndArraysSameSizeAsArrayLists() {
+        File constructorFile = new File("edge_files/Courses.edg");
+
+		try {
+            EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+            Field tablesField = EdgeConvertFileParser.class.getDeclaredField("tables");
+            Field fieldsField = EdgeConvertFileParser.class.getDeclaredField("fields");
+            Field connectorsField = EdgeConvertFileParser.class.getDeclaredField("connectors");
+            Field alTablesField = EdgeConvertFileParser.class.getDeclaredField("alTables");
+            Field alFieldsField = EdgeConvertFileParser.class.getDeclaredField("alFields");
+            Field alConnectorsField = EdgeConvertFileParser.class.getDeclaredField("alConnectors");
+
+            // set private fields as accessible
+            tablesField.setAccessible(true);
+            fieldsField.setAccessible(true);
+            connectorsField.setAccessible(true);
+            alTablesField.setAccessible(true);
+            alFieldsField.setAccessible(true);
+            alConnectorsField.setAccessible(true);
+
+            ArrayList alTables = (ArrayList)alTablesField.get(edgFileParser);
+            ArrayList alFields = (ArrayList)alFieldsField.get(edgFileParser);
+            ArrayList alConnectors = (ArrayList)alConnectorsField.get(edgFileParser);
+
+            // openFile() should return true since 'Courses.edg' is a valid edge file
+            assertTrue(edgFileParser.openFile(constructorFile));
+
+            EdgeTable[] tables = (EdgeTable[])tablesField.get(edgFileParser);
+            EdgeField[] fields = (EdgeField[])fieldsField.get(edgFileParser);
+            EdgeConnector[] connectors = (EdgeConnector[])connectorsField.get(edgFileParser);
+
+            // assert that these 3 arrays are not null
+            assertNotNull(tables);
+            assertNotNull(fields);
+            assertNotNull(connectors);
+
+            // assert that arrays and their corresponding ArrayLists are the same size
+            assertEquals(tables.length, alTables.size());
+            assertEquals(fields.length, alFields.size());
+            assertEquals(connectors.length, alConnectors.size());
+        } catch (NoSuchFieldException nsfe) {
+            nsfe.printStackTrace();
+        } catch (IllegalAccessException iae) {
+            iae.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testOpenFileReturnsFalseWhenFileDoesNotExist() {
+        File constructorFile = new File("doesnotexist/doesnotexist/doesnotexist.edg");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return false, since 'doesnotexist/doesnotexist/doesnotexist.edg' is not an actual file
+        assertFalse(edgFileParser.openFile(constructorFile));
+    }
+
+    @Test
+    public void testOpenFileReturnsFalseWhenFileIsDirectory() {
+        File constructorFile = new File("edge_files");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return false, since 'edge_files' is a directory
+        assertFalse(edgFileParser.openFile(constructorFile));
+    }
+
+    @Test
+    public void testOpenFileReturnsTrueWithValidSaveFile() {
+        File constructorFile = new File("save_files/Courses.edg.sav");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return true since 'Courses.edg.sav' is a valid sav file
+        assertTrue(edgFileParser.openFile(constructorFile));
+    }
+
+    @Test
+    public void testOpenFileReturnsFalseWithIncorrectExtensionType() {
+        File constructorFile = new File("save_files/Courses.png");
+        EdgeConvertFileParser edgFileParser = new EdgeConvertFileParser(constructorFile, false, false);
+
+        // openFile() should return false since 'Courses.png' is not a valid file extension for the program
+        assertFalse(edgFileParser.openFile(constructorFile));
     }
 }
