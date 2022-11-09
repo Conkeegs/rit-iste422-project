@@ -22,11 +22,12 @@ public class CreateDDLMySQLTest {
 	//tests that the basic StringBuffer is the same as the sample DDLMySQL's StringBuffer
   @Test
   public void createDDLConstructorTest(){
-		CreateDDLMySQL testObj = new CreateDDLMySQL(et, ef);
-    testObj.createDDL();
+		CreateDDLMySQL testObj = new CreateDDLMySQL(et, ef, false);
+		testObj.databaseName = "MySQLDB";
+    	testObj.createDDL();
 		String testStr = testObj.sb.toString();
 		
-    assertEquals("Should be same as Null StringBuffer", testStr, baseSB.toString());
+    	assertEquals("Should be same as Null StringBuffer", testStr, baseSB.toString());
   }
 
 	//tests that conversion to between string and int works correctly
@@ -43,6 +44,8 @@ public class CreateDDLMySQLTest {
 	@Test
 	public void generateDatabaseNameTest(){
 		CreateDDLMySQL testObj = new CreateDDLMySQL();
+		testObj.showGuis = false;
+		testObj.databaseName = "MySQLDB";
 		String dbName = testObj.generateDatabaseName();
 		boolean readSuccess = EdgeConvertGUI.getReadSuccess();
 
@@ -54,6 +57,8 @@ public class CreateDDLMySQLTest {
 	@Test
 	public void getDatabaseNameTest(){
 		CreateDDLMySQL testObj = new CreateDDLMySQL();
+		testObj.showGuis = false;
+		testObj.databaseName = "MySQLDB";
 		String input = testObj.generateDatabaseName();
 		
 		assertEquals("Input should be database name", testObj.getDatabaseName(), input);
@@ -70,7 +75,8 @@ public class CreateDDLMySQLTest {
 
 	@Test
 	public void getSQLStringTest(){
-		CreateDDLMySQL testObj = new CreateDDLMySQL(et, ef);
+		CreateDDLMySQL testObj = new CreateDDLMySQL(et, ef, false);
+		testObj.databaseName = "MySQLDB";
 		String testStr = testObj.getSQLString();
 		
 		assertEquals("SQLString should be null", testStr, baseSB.toString());
