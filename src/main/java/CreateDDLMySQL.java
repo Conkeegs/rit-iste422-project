@@ -14,12 +14,18 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
    //this array is for determining how MySQL refers to datatypes
    protected String[] strDataType = {"VARCHAR", "BOOL", "INT", "DOUBLE"};
    protected StringBuffer sb;
+   protected boolean showGuis = true;
    
    public static Logger logger = LogManager.getLogger(EdgeConvertCreateDDL.class.getName());
    public static Logger timeLogger = LogManager.getLogger("timer." + EdgeConvertCreateDDL.class.getName());
 
    public CreateDDLMySQL(EdgeTable[] inputTables, EdgeField[] inputFields) {
+      this(inputTables, inputFields, true);
+   }
+
+   public CreateDDLMySQL(EdgeTable[] inputTables, EdgeField[] inputFields, boolean showGuis) {
       super(inputTables, inputFields);
+      this.showGuis = showGuis;
       sb = new StringBuffer();
    } //CreateDDLMySQL(EdgeTable[], EdgeField[])
    
@@ -126,7 +132,8 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
       //String databaseName = "";
 
       do {
-         databaseName = (String)JOptionPane.showInputDialog(
+         if (this.showGuis) {
+            databaseName = (String)JOptionPane.showInputDialog(
                        null,
                        "Enter the database name:",
                        "Database Name",
@@ -134,12 +141,15 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
                        null,
                        null,
                        dbNameDefault);
+         }
          if (databaseName == null) {
             EdgeConvertGUI.setReadSuccess(false);
             return "";
          }
          if (databaseName.equals("")) {
-            JOptionPane.showMessageDialog(null, "You must select a name for your database.");
+            if (this.showGuis) {
+               JOptionPane.showMessageDialog(null, "You must select a name for your database.");
+            }
          }
       } while (databaseName.equals(""));
       timeLogger.info("method generateDatabaseName ended.");
