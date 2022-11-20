@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.filechooser.FileFilter;
 import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -20,8 +19,8 @@ public class EdgeConvertGUI {
    public static final String DEFINE_TABLES = "Define Tables";
    public static final String DEFINE_RELATIONS = "Define Relations";
    public static final String CANCELLED = "CANCELLED";
-   private static JFileChooser jfcEdge, jfcGetClass, jfcOutputDir;
-   private static ExampleFileFilter effEdge, effSave, effClass;
+   private static JFileChooser jfcEdge, jfcOutputDir;
+   private static ExampleFileFilter effEdge, effSave;
    private File parseFile, saveFile, outputFile, outputDir, outputDirOld;
    private String truncatedFilename;
    private String sqlString;
@@ -104,7 +103,6 @@ public class EdgeConvertGUI {
       timeLogger.info("createDTScreen called.");
       jfDT = new JFrame(DEFINE_TABLES);
       jfDT.setLocation(HORIZ_LOC, VERT_LOC);
-      Container cp = jfDT.getContentPane();
       jfDT.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       jfDT.addWindowListener(edgeWindowListener);
       jfDT.getContentPane().setLayout(new BorderLayout());
@@ -386,7 +384,6 @@ public class EdgeConvertGUI {
                         break;
                      case 2: //Integer
                         try {
-                           int intResult = Integer.parseInt(result);
                            jtfDTDefaultValue.setText(result);
                            goodData = true;
                         } catch (NumberFormatException nfe) {
@@ -395,7 +392,6 @@ public class EdgeConvertGUI {
                         break;
                      case 3: //Double
                         try {
-                           double doubleResult = Double.parseDouble(result);
                            jtfDTDefaultValue.setText(result);
                            goodData = true;
                         } catch (NumberFormatException nfe) {
@@ -444,7 +440,6 @@ public class EdgeConvertGUI {
                   jtfDTVarchar.setText(prev);
                   return;
                }
-               int selIndex = jlDTFieldsTablesAll.getSelectedIndex();
                int varchar;
                try {
                   if (result.length() > 5) {
@@ -563,7 +558,7 @@ public class EdgeConvertGUI {
                if (selIndex >= 0) {
                   String selText = dlmDRTablesRelations.getElementAt(selIndex).toString();
                   setCurrentDRTable1(selText);
-                  int[] currentNativeFields, currentRelatedTables, currentRelatedFields;
+                  int[] currentNativeFields, currentRelatedTables;
                   currentNativeFields = currentDRTable1.getNativeFieldsArray();
                   currentRelatedTables = currentDRTable1.getRelatedTablesArray();
                   jlDRFieldsTablesRelations.clearSelection();
@@ -1153,7 +1148,6 @@ public class EdgeConvertGUI {
    private void writeSQL(String output) {
       timeLogger.info("writeSQL() called.");
       jfcEdge.resetChoosableFileFilters();
-      String str;
       if (parseFile != null) {
          outputFile = new File(parseFile.getAbsolutePath().substring(0, (parseFile.getAbsolutePath().lastIndexOf(File.separator) + 1)) + databaseName + ".sql");
       } else {

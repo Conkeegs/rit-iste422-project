@@ -36,7 +36,6 @@
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Enumeration;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,9 +57,6 @@ import org.apache.logging.log4j.Logger;
  * @author Jeff Dinkins
  */
 public class ExampleFileFilter extends FileFilter {
-
-	private static String TYPE_UNKNOWN = "Type Unknown";
-	private static String HIDDEN_FILE = "Hidden File";
 
 	private Hashtable filters = null;
 	private String description = null;
