@@ -29,8 +29,8 @@ public class EdgeConvertGUI {
    EdgeRadioButtonListener radioListener;
    EdgeWindowListener edgeWindowListener;
    CreateDDLButtonListener createDDLListener;
-   private EdgeConvertFileParser ecfp;
-   private EdgeConvertCreateDDL eccd;
+   private EdgeParser edgeParser;
+   private SaveParser saveParser;
    private static PrintWriter pw;
    private EdgeTable[] tables; //master copy of EdgeTable objects
    private EdgeField[] fields; //master copy of EdgeField objects
@@ -1283,13 +1283,14 @@ public class EdgeConvertGUI {
             returnVal = jfcEdge.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                parseFile = jfcEdge.getSelectedFile();
-               ecfp = new EdgeConvertFileParser(parseFile);
-               tables = ecfp.getEdgeTables();
+               edgeParser = new EdgeParser(parseFile);
+               edgeParser.openFile();
+               tables = edgeParser.getEdgeTables();
                for (int i = 0; i < tables.length; i++) {
                   tables[i].makeArrays();
                }
-               fields = ecfp.getEdgeFields();
-               ecfp = null;
+               fields = edgeParser.getEdgeFields();
+               edgeParser = null;
                populateLists();
                saveFile = null;
                jmiDTSave.setEnabled(false);
@@ -1323,10 +1324,11 @@ public class EdgeConvertGUI {
             returnVal = jfcEdge.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                saveFile = jfcEdge.getSelectedFile();
-               ecfp = new EdgeConvertFileParser(saveFile);
-               tables = ecfp.getEdgeTables();
-               fields = ecfp.getEdgeFields();
-               ecfp = null;
+               saveParser = new SaveParser(saveFile);
+               saveParser.openFile();
+               tables = saveParser.getEdgeTables();
+               fields = saveParser.getEdgeFields();
+               saveParser = null;
                populateLists();
                parseFile = null;
                jmiDTSave.setEnabled(true);
