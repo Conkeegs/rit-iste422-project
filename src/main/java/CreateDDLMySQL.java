@@ -35,7 +35,7 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
    public void createDDL() {
       timeLogger.info("Constructor called.");
       EdgeConvertGUI.setReadSuccess(true);
-		 	String[] strDataType = {"VARCHAR", "BOOL", "INT", "DOUBLE"};
+      final String[] strDataType = {"VARCHAR", "BOOL", "INT", "DOUBLE"};
       databaseName = generateDatabaseName();
       sb.append("CREATE DATABASE " + databaseName + ";\r\n");
       sb.append("USE " + databaseName + ";\r\n");
