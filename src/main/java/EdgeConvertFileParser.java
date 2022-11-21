@@ -18,9 +18,10 @@ public class EdgeConvertFileParser {
    private boolean showGuis = true;
    private int numFigure, numConnector;
    private int endPoint1, endPoint2;
-	 public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
- 	 public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
+   public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
+   public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
    public static final String DELIM = "|";
+	
    public static Logger logger = LogManager.getLogger(EdgeConvertFileParser.class.getName());
    public static Logger timeLogger = LogManager.getLogger("timer." + EdgeConvertFileParser.class.getName());
 
