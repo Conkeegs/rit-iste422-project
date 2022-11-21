@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 public class EdgeConvertFileParser {
    //private String filename = "test.edg";
    private File parseFile;
+   private FileReader fr;
    private BufferedReader br;
    private String currentLine;
    private ArrayList alTables, alFields, alConnectors;
@@ -15,12 +16,20 @@ public class EdgeConvertFileParser {
    private EdgeField[] fields;
    private EdgeField tempField;
    private EdgeConnector[] connectors;
+   private String style;
+   private String text;
+   private String tableName;
+   private String fieldName;
+   private boolean isEntity, isAttribute, isUnderlined = false;
    private boolean showGuis = true;
-   private int numFigure, numConnector;
+   private int numFigure, numConnector, numFields, numTables, numNativeRelatedFields;
    private int endPoint1, endPoint2;
-	 public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
- 	 public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
+   private int numLine;
+   private String endStyle1, endStyle2;
+   public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
+   public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
    public static final String DELIM = "|";
+   
    public static Logger logger = LogManager.getLogger(EdgeConvertFileParser.class.getName());
    public static Logger timeLogger = LogManager.getLogger("timer." + EdgeConvertFileParser.class.getName());
 
@@ -48,7 +57,10 @@ public class EdgeConvertFileParser {
       alTables = new ArrayList();
       alFields = new ArrayList();
       alConnectors = new ArrayList();
+      isEntity = false;
+      isAttribute = false;
       parseFile = constructorFile;
+      numLine = 0;
       
       if (openAutomatically) {
          this.openFile(parseFile);
@@ -59,12 +71,7 @@ public class EdgeConvertFileParser {
 
    public boolean parseEdgeFile() throws IOException {
       timeLogger.info("parseEdgeFile() called.");
-		  String style;
-		  String text;
-		  String endStyle1, endStyle2;
-			boolean isEntity=false; 
-		  boolean isAttribute=false; 
-		  boolean isUnderlined = false;
+
       logger.info("Reading Edge Diagrammer file.");
       logger.debug("About to read all lines in Edge Diagrammer file.");
 
@@ -426,13 +433,11 @@ public class EdgeConvertFileParser {
    } // resolveConnectors()
    
    public boolean parseSaveFile() throws IOException { //this method is unclear and confusing in places
-		 	timeLogger.info("parseSaveFile() called.");
-			String tableName;
-		  String fieldName;
+      timeLogger.info("parseSaveFile() called.");
+
       StringTokenizer stTables, stNatFields, stRelFields, stNatRelFields, stField;
       EdgeTable tempTable;
       EdgeField tempField;
-		  int numFields, numTables;
       currentLine = br.readLine();
       currentLine = br.readLine(); //this should be "Table: "
 
@@ -659,12 +664,11 @@ public class EdgeConvertFileParser {
    }
    
    public boolean openFile(File inputFile) {
-		  int numLine=0;
       timeLogger.info("openFile() called.");
       logger.debug(String.format("openFile() called with file: %s", inputFile.getAbsolutePath()));
 
       try {
-         FileReader fr = new FileReader(inputFile);
+         fr = new FileReader(inputFile);
          br = new BufferedReader(fr);
 
          //test for what kind of file we have
@@ -716,8 +720,6 @@ public class EdgeConvertFileParser {
          logger.trace(String.format("Cannot find: \"%s\".", inputFile.getAbsolutePath()));
 
          timeLogger.info("EdgeConvertFileParser.openFile() ended.");
-				 if(this.showGuis)
-						JOptionPane.showMessageDialog(null, "File Not Found!");
          return false;
       } // catch FileNotFoundException
       catch (IOException ioe) {
@@ -725,8 +727,6 @@ public class EdgeConvertFileParser {
          logger.trace(String.format("Cannot reading file: \"%s\".", inputFile.getAbsolutePath()));
 
          timeLogger.info("EdgeConvertFileParser.openFile() ended.");
-				 if(this.showGuis)
-	 				 JOptionPane.showMessageDialog(null, "An Unexpected Error Has Occured");
          return false;
       } // catch IOException
    } // openFile()
