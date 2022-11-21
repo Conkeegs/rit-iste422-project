@@ -1252,9 +1252,9 @@ public class EdgeConvertGUI {
       public void actionPerformed(ActionEvent ae) {
          timeLogger.info("CreateDDLButtonListener.actionPerformed() called.");
          logger.info("Client selected Create DDL"); // working
-         while (outputDir == null) {
-            JOptionPane.showMessageDialog(null, "You have not selected a path that contains valid output definition files yet.\nPlease select a path now.");
-            setOutputDir();
+         if (outputDir == null) {
+            JOptionPane.showMessageDialog(null, "The current output file definition location contains no valid output definition files.\nPlease make sure a valid location is selected.");
+            return;
          }
          getOutputClasses(); //in case outputDir was set before a file was loaded and EdgeTable/EdgeField objects created
          sqlString = getSQLStatements();
