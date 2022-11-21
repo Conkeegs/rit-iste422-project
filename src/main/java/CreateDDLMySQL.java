@@ -12,7 +12,6 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
 
    protected String databaseName;
    //this array is for determining how MySQL refers to datatypes
-   protected String[] strDataType = {"VARCHAR", "BOOL", "INT", "DOUBLE"};
    protected StringBuffer sb;
    protected boolean showGuis = true;
    
@@ -36,6 +35,7 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
    public void createDDL() {
       timeLogger.info("Constructor called.");
       EdgeConvertGUI.setReadSuccess(true);
+		 	String[] strDataType = {"VARCHAR", "BOOL", "INT", "DOUBLE"};
       databaseName = generateDatabaseName();
       sb.append("CREATE DATABASE " + databaseName + ";\r\n");
       sb.append("USE " + databaseName + ";\r\n");
