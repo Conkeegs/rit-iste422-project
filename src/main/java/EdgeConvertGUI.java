@@ -715,6 +715,12 @@ public class EdgeConvertGUI {
                      return;
                   }
                }
+               if (!currentDRField1.getIsPrimaryKey() || !currentDRField2.getIsPrimaryKey()) {
+                  JOptionPane.showMessageDialog(null, currentDRTable1.getName() + "." +
+                        currentDRField1.getName() + " or " + currentDRTable2.getName() +
+                        "." + currentDRField2.getName() + " is not a primary key.  Unable to bind this relation.");
+                  return;
+               }
                currentDRTable1.setRelatedField(nativeIndex, relatedField);
                currentDRField1.setTableBound(currentDRTable2.getNumFigure());
                currentDRField1.setFieldBound(currentDRField2.getNumFigure());
