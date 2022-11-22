@@ -63,53 +63,53 @@ public class EdgeConvertCreateDDLTest {
 
 	@Test
 	public void givenCreateDDLMySQLWithTwoBoundTables() {
-		assertEquals("numBoundTables length should be three", eccd.numBoundTables.length, 3);
+		assertEquals("numBoundTables length should be three", 3, eccd.numBoundTables.length);
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithTableNumFigure0ContainsNameTEST() {
 		assertEquals("table with numFigure 0 should have name TEST", eccd.getTable(0), table1);
-		assertEquals("numFigure should be 0", eccd.getTable(0).getNumFigure(), 0);
+		assertEquals("numFigure should be 0", 0, eccd.getTable(0).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithTableNumFigure1ContainsNameJUNIT() {
 		assertEquals("table with numFigure 1 should have name JUNIT", eccd.getTable(1), table2);
-		assertEquals("numFigure should be 1", eccd.getTable(1).getNumFigure(), 1);
+		assertEquals("numFigure should be 1", 1, eccd.getTable(1).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithTableNumFigure999ContainsNameJAVA() {
 		assertEquals("table with numFigure 999 should have name JAVA", eccd.getTable(999), table3);
-		assertEquals("numFigure should be 999", eccd.getTable(999).getNumFigure(), 999);
+		assertEquals("numFigure should be 999", 999, eccd.getTable(999).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithTableNumFigure3shouldBeNull() {
-		assertEquals("table with numFigure 3 should be null", eccd.getTable(3), null);
+		assertEquals("table with numFigure 3 should be null", null, eccd.getTable(3));
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithFieldNumFigure0ContainsNameTest() {
 		assertEquals("field with numFigure 0 should have name Test", eccd.getField(0), field1);
-		assertEquals("numFigure should be 0", eccd.getField(0).getNumFigure(), 0);
+		assertEquals("numFigure should be 0", 0, eccd.getField(0).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithFieldNumFigure5ContainsNameJunit() {
 		assertEquals("field with numFigure 5 should have named Junit", eccd.getField(5), field2);
-		assertEquals("numFigure should be 5", eccd.getField(5).getNumFigure(), 5);
+		assertEquals("numFigure should be 5", 5, eccd.getField(5).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithFieldNumFigure999ContainsNameJava() {
 		assertEquals("field with numFigure 999 should have named Java", eccd.getField(999), field3);
-		assertEquals("numFigure should be 999", eccd.getField(999).getNumFigure(), 999);
+		assertEquals("numFigure should be 999", 999, eccd.getField(999).getNumFigure());
 	}
 
 	@Test
 	public void givenCreateDDLMySQLWithFieldNumFigure4shouldBeNull() {
-		assertEquals("field with numFigure 4 should be null", eccd.getField(4), null);
+		assertEquals("field with numFigure 4 should be null", null, eccd.getField(4));
 	}
 
 	@Test
@@ -145,11 +145,11 @@ public class EdgeConvertCreateDDLTest {
 		};
 		assertArrayEquals("eccdWithNoParams shouldnt have any numBoundTables", eccdWithNoParams.numBoundTables, null);
 
-		assertEquals("maxBound should be zero because numBoundTables is null", eccdWithNoParams.maxBound, 0);
+		assertEquals("maxBound should be zero because numBoundTables is null", 0, eccdWithNoParams.maxBound);
 
-		assertEquals("stringBuffer should be null", eccdWithNoParams.sb, null);
+		assertEquals("stringBuffer should be null", null, eccdWithNoParams.sb);
 
-		assertEquals("selected be zero", eccdWithNoParams.selected, 0);
+		assertEquals("selected be zero", 0, eccdWithNoParams.selected);
 
 		assertArrayEquals("eccdWithNoParams shouldnt have any table", eccdWithNoParams.tables, null);
 
@@ -212,10 +212,10 @@ public class EdgeConvertCreateDDLTest {
 				fields);
 
 		assertEquals("field at index 0, numFigure should be 5 and name should be Test",
-				eccdWithParams.fields[0].toString(), "5|Test|0|0|0|0|1|false|false|");
+				"5|Test|0|0|0|0|1|false|false|", eccdWithParams.fields[0].toString());
 
 		assertEquals("table at index 0, numFigure should be 1000 and name should be COURSE",
-				eccdWithParams.tables[0].toString(),
-				"Table: 1000\r\n{\r\nTableName: COURSE\r\nNativeFields: \r\nRelatedTables: \r\nRelatedFields: \r\n}\r\n");
+				"Table: 1000\r\n{\r\nTableName: COURSE\r\nNativeFields: \r\nRelatedTables: \r\nRelatedFields: \r\n}\r\n",
+				eccdWithParams.tables[0].toString());
 	}
 }

@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EdgeConvertFileParser {
-   //private String filename = "test.edg";
    private File parseFile;
    private FileReader fr;
    private BufferedReader br;
@@ -24,7 +23,6 @@ public class EdgeConvertFileParser {
    private boolean showGuis = true;
    private int numFigure, numConnector, numFields, numTables, numNativeRelatedFields;
    private int endPoint1, endPoint2;
-   private int numLine;
    private String endStyle1, endStyle2;
    public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
    public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
@@ -60,7 +58,6 @@ public class EdgeConvertFileParser {
       isEntity = false;
       isAttribute = false;
       parseFile = constructorFile;
-      numLine = 0;
       
       if (openAutomatically) {
          this.openFile(parseFile);
@@ -134,7 +131,7 @@ public class EdgeConvertFileParser {
                }
 
                currentLine = br.readLine().trim(); //this should be Text
-               text = currentLine.substring(currentLine.indexOf("\"") + 1, currentLine.lastIndexOf("\"")).replaceAll(" ", ""); //get the Text parameter
+               text = currentLine.substring(currentLine.indexOf("\"") + 1, currentLine.lastIndexOf("\"")).replace(" ", ""); //get the Text parameter
 
                logger.debug(String.format("Current line in diagrammer file is: %s", currentLine));
                logger.debug(String.format("Current text parameter in loop is: %s", text));
@@ -220,7 +217,7 @@ public class EdgeConvertFileParser {
                isAttribute = false;
                isUnderlined = false;
             }
-         } // if("Figure")
+         }
 
          if (currentLine.startsWith("Connector ")) { //this is the start of a Connector entry
             logger.info("Parsing diagrammer file Connectors.");
@@ -295,7 +292,6 @@ public class EdgeConvertFileParser {
    private boolean resolveConnectors() { //Identify nature of Connector endpoints
       timeLogger.info("resolveConnectors() called.");
 
-      int endPoint1, endPoint2;
       int fieldIndex = 0, table1Index = 0, table2Index = 0;
 
       logger.debug(String.format("Looping through connectors of length: %d", connectors.length));
@@ -573,11 +569,11 @@ public class EdgeConvertFileParser {
 
          logger.debug(String.format("Setting varchar value in EdgeField to: %d", tempField.getVarcharValue()));
 
-         tempField.setIsPrimaryKey(Boolean.valueOf(stField.nextToken()).booleanValue());
+         tempField.setIsPrimaryKey(Boolean.parseBoolean(stField.nextToken()));
 
          logger.debug(String.format("Setting field as primary in EdgeField: %b", tempField.getIsPrimaryKey()));
 
-         tempField.setDisallowNull(Boolean.valueOf(stField.nextToken()).booleanValue());
+         tempField.setDisallowNull(Boolean.parseBoolean(stField.nextToken()));
 
          logger.debug(String.format("Setting disallow null in EdgeField to: %b", tempField.getDisallowNull()));
 
@@ -673,7 +669,6 @@ public class EdgeConvertFileParser {
 
          //test for what kind of file we have
          currentLine = br.readLine().trim();
-         numLine++;
 
          if (currentLine.startsWith(EDGE_ID)) { //the file chosen is an Edge Diagrammer file
             logger.info("Chosen file is an Edge Diagrammer file.");

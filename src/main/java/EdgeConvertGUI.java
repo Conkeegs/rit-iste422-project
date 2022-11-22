@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.filechooser.FileFilter;
 import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -20,8 +19,8 @@ public class EdgeConvertGUI {
    public static final String DEFINE_TABLES = "Define Tables";
    public static final String DEFINE_RELATIONS = "Define Relations";
    public static final String CANCELLED = "CANCELLED";
-   private static JFileChooser jfcEdge, jfcGetClass, jfcOutputDir;
-   private static ExampleFileFilter effEdge, effSave, effClass;
+   private static JFileChooser jfcEdge, jfcOutputDir;
+   private static ExampleFileFilter effEdge, effSave;
    private File parseFile, saveFile, outputFile, outputDir, outputDirOld;
    private String truncatedFilename;
    private String sqlString;
@@ -31,7 +30,6 @@ public class EdgeConvertGUI {
    EdgeWindowListener edgeWindowListener;
    CreateDDLButtonListener createDDLListener;
    private EdgeConvertFileParser ecfp;
-   private EdgeConvertCreateDDL eccd;
    private static PrintWriter pw;
    private EdgeTable[] tables; //master copy of EdgeTable objects
    private EdgeField[] fields; //master copy of EdgeField objects
@@ -104,7 +102,6 @@ public class EdgeConvertGUI {
       timeLogger.info("createDTScreen called.");
       jfDT = new JFrame(DEFINE_TABLES);
       jfDT.setLocation(HORIZ_LOC, VERT_LOC);
-      Container cp = jfDT.getContentPane();
       jfDT.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       jfDT.addWindowListener(edgeWindowListener);
       jfDT.getContentPane().setLayout(new BorderLayout());
@@ -386,7 +383,6 @@ public class EdgeConvertGUI {
                         break;
                      case 2: //Integer
                         try {
-                           int intResult = Integer.parseInt(result);
                            jtfDTDefaultValue.setText(result);
                            goodData = true;
                         } catch (NumberFormatException nfe) {
@@ -395,7 +391,6 @@ public class EdgeConvertGUI {
                         break;
                      case 3: //Double
                         try {
-                           double doubleResult = Double.parseDouble(result);
                            jtfDTDefaultValue.setText(result);
                            goodData = true;
                         } catch (NumberFormatException nfe) {
@@ -411,7 +406,9 @@ public class EdgeConvertGUI {
 
                         }
                         break;
-                  }
+                     default: //default 
+                        goodData = false;
+                  } 
                } while (!goodData);
                int selIndex = jlDTFieldsTablesAll.getSelectedIndex();
                if (selIndex >= 0) {
@@ -712,13 +709,12 @@ public class EdgeConvertGUI {
                                                 "." + currentDRField2.getName() + " do not match.  Unable to bind this relation.");
                   return;
                }
-               if ((currentDRField1.getDataType() == 0) && (currentDRField2.getDataType() == 0)) {
-                  if (currentDRField1.getVarcharValue() != currentDRField2.getVarcharValue()) {
+               if (((currentDRField1.getDataType() == 0) && (currentDRField2.getDataType() == 0))
+                && (currentDRField1.getVarcharValue() != currentDRField2.getVarcharValue())) {
                      JOptionPane.showMessageDialog(null, "The varchar lengths of " + currentDRTable1.getName() + "." +
                                                    currentDRField1.getName() + " and " + currentDRTable2.getName() +
                                                    "." + currentDRField2.getName() + " do not match.  Unable to bind this relation.");
                      return;
-                  }
                }
                currentDRTable1.setRelatedField(nativeIndex, relatedField);
                currentDRField1.setTableBound(currentDRTable2.getNumFigure());
