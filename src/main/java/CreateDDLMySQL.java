@@ -31,7 +31,7 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
    public void createDDL() {
       timeLogger.info("Constructor called.");
       EdgeConvertGUI.setReadSuccess(true);
-      databaseName = generateDatabaseName();
+      databaseName = generateDatabaseName().replaceAll(" ", "");
       sb.append("CREATE DATABASE " + databaseName + ";\r\n");
       sb.append("USE " + databaseName + ";\r\n");
       for (int boundCount = 0; boundCount <= maxBound; boundCount++) { //process tables in order from least dependent (least number of bound tables) to most dependent
@@ -57,7 +57,7 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
                      if (currentField.getDataType() == 1) { //boolean data type
                         sb.append(" DEFAULT " + convertStrBooleanToInt(currentField.getDefaultValue()));
                      } else { //any other data type
-                        sb.append(" DEFAULT " + currentField.getDefaultValue());
+                        sb.append(" DEFAULT " + (currentField.getDataType() == 0 ? "'" + currentField.getDefaultValue().replaceAll("\"|'", "") + "'" : currentField.getDefaultValue()));
                      }
                   }
                   if (currentField.getIsPrimaryKey()) {
