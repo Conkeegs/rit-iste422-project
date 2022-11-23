@@ -7,7 +7,6 @@ public abstract class EdgeConvertCreateDDL {
    protected EdgeField[] fields; //master copy of EdgeField objects
    protected int[] numBoundTables;
    protected int maxBound;
-   protected StringBuffer sb;
    protected int selected;
    
 	public static Logger logger = LogManager.getLogger(EdgeConvertCreateDDL.class.getName());
@@ -29,7 +28,6 @@ public abstract class EdgeConvertCreateDDL {
 		timeLogger.info("method initialize called.");
       numBoundTables = new int[tables.length];
       maxBound = 0;
-      sb = new StringBuffer();
 
       for (int i = 0; i < tables.length; i++) { //step through list of tables
          int numBound = 0; //initialize counter for number of bound tables

@@ -54,7 +54,7 @@ public class SaveParser extends EdgeConvertFileParser {
             numFigure = Integer.parseInt(currentLine.substring(currentLine.indexOf(" ") + 1)); //get the Table number
             currentLine = br.readLine(); //this should be "{"
             currentLine = br.readLine(); //this should be "TableName"
-            tableName = currentLine.substring(currentLine.indexOf(" ") + 1);
+            String tableName = currentLine.substring(currentLine.indexOf(" ") + 1);
     
             logger.debug(String.format("Current line in save file is: %s", currentLine));
             logger.debug(String.format("Current table number in loop is: %d", numFigure));
@@ -213,7 +213,6 @@ public class SaveParser extends EdgeConvertFileParser {
   
            //test for what kind of file we have
            currentLine = br.readLine().trim();
-           numLine++;
   
            if (currentLine.startsWith(SAVE_ID) == false) { //the file chosen is not a .sav file
                 logger.warn("Unrecognized file format chosen.");

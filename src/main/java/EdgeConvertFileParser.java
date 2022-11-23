@@ -14,12 +14,9 @@ public abstract class EdgeConvertFileParser {
    protected ArrayList alTables, alFields, alConnectors;
    protected EdgeTable[] tables;
    protected EdgeField[] fields;
-   protected EdgeField tempField;
    protected EdgeConnector[] connectors;
-   protected String tableName;
    protected boolean showGuis = true;
    protected int numFigure, numConnector, numFields, numTables, numNativeRelatedFields;
-   protected int numLine;
    public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
    public static final String SAVE_ID = "EdgeConvert Save File"; //first line of save files should be this
    public static final String DELIM = "|";
@@ -43,7 +40,6 @@ public abstract class EdgeConvertFileParser {
       alFields = new ArrayList();
       alConnectors = new ArrayList();
       parseFile = constructorFile;
-      numLine = 0;
 
       timeLogger.info("Constructor ended.");
    }

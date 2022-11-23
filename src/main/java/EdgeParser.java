@@ -13,7 +13,6 @@ public class EdgeParser extends EdgeConvertFileParser {
     protected boolean isEntity = false;
     protected boolean isAttribute = false;
     private boolean isUnderlined = false;
-    protected String text;
 
     public static Logger logger = LogManager.getLogger(EdgeParser.class.getName());
     public static Logger timeLogger = LogManager.getLogger("timer." + EdgeParser.class.getName());
@@ -104,7 +103,7 @@ public class EdgeParser extends EdgeConvertFileParser {
                     }
     
                     currentLine = br.readLine().trim(); //this should be Text
-                    text = currentLine.substring(currentLine.indexOf("\"") + 1, currentLine.lastIndexOf("\"")).replaceAll(" ", ""); //get the Text parameter
+                    String text = currentLine.substring(currentLine.indexOf("\"") + 1, currentLine.lastIndexOf("\"")).replaceAll(" ", ""); //get the Text parameter
     
                     logger.debug(String.format("Current line in diagrammer file is: %s", currentLine));
                     logger.debug(String.format("Current text parameter in loop is: %s", text));
@@ -177,7 +176,7 @@ public class EdgeParser extends EdgeConvertFileParser {
                     if (isAttribute) { //create a new EdgeField object and add it to the alFields ArrayList
                         logger.debug("isAttribute is 'true'.");
     
-                        tempField = new EdgeField(numFigure + DELIM + text);
+                        EdgeField tempField = new EdgeField(numFigure + DELIM + text);
                         tempField.setIsPrimaryKey(isUnderlined);
                         alFields.add(tempField);
     
@@ -272,7 +271,6 @@ public class EdgeParser extends EdgeConvertFileParser {
     
             //test for what kind of file we have
             currentLine = br.readLine().trim();
-            numLine++;
 
             if (currentLine.startsWith(EDGE_ID) == false) { //the file chosen is not an .edg file
                 logger.warn("Unrecognized file format chosen.");
