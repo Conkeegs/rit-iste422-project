@@ -148,8 +148,6 @@ public class EdgeConvertCreateDDLTest {
 
         assertEquals("maxBound should be zero because numBoundTables is null", eccdWithNoParams.maxBound, 0);
 
-        assertEquals("stringBuffer should be null", eccdWithNoParams.sb, null);
-
         assertEquals("selected be zero", eccdWithNoParams.selected, 0);
 
         assertArrayEquals("eccdWithNoParams shouldnt have any table", eccdWithNoParams.tables, null);
